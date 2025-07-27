@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:otobix/Homepage.dart';
+import 'package:otobix/services/auth_service.dart';
+import 'package:otobix/Pages/Dashboard/dashboard_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -47,13 +49,16 @@ class _SplashScreenState extends State<SplashScreen>
     _animationController.forward();
   }
 
-  void _navigateToHome() {
-    Future.delayed(const Duration(seconds: 3), () {
+  void _navigateToHome() async {
+    Future.delayed(const Duration(seconds: 3), () async {
       if (mounted) {
+        final isLoggedIn = await AuthService.isLoggedIn();
+        
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
-            pageBuilder:
-                (context, animation, secondaryAnimation) => const Homepage(),
+            pageBuilder: (context, animation, secondaryAnimation) {
+              return isLoggedIn ? const DashboardPage() : const Homepage();
+            },
             transitionsBuilder: (
               context,
               animation,
