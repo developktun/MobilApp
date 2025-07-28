@@ -6,6 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:otobix/Constants/AppString_constants.dart';
 import 'package:otobix/components/View/Button/Button_view.dart';
 import 'package:otobix/components/View/TextField/TextField_views.dart';
+import 'package:otobix/services/auth_service.dart';
+import 'package:otobix/Pages/Dashboard/dashboard_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,6 +18,72 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool isRememberMe = false; // Checkbox için state değişkeni
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedCredentials();
+  }
+
+  Future<void> _loadSavedCredentials() async {
+    final savedEmail = await AuthService.getSavedEmail();
+    final savedPassword = await AuthService.getSavedPassword();
+    final rememberMe = await AuthService.isRememberMeEnabled();
+    
+    if (savedEmail.isNotEmpty && savedPassword.isNotEmpty && rememberMe) {
+      setState(() {
+        _emailController.text = savedEmail;
+        _passwordController.text = savedPassword;
+        isRememberMe = true;
+      });
+    }
+  }
+
+  Future<void> _handleLogin() async {
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      _showSnackBar('Lütfen tüm alanları doldurun');
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final success = await AuthService.login(
+        _emailController.text,
+        _passwordController.text,
+        isRememberMe,
+      );
+
+      if (success) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => DashboardPage()),
+          (route) => false,
+        );
+      } else {
+        _showSnackBar('Giriş başarısız. Lütfen bilgilerinizi kontrol edin.');
+      }
+    } catch (e) {
+      _showSnackBar('Bir hata oluştu: $e');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +148,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(height: 8),
               TextfieldViews(
+                controller: _emailController,
                 obscureText: false,
                 enabled: true,
                 hintText: 'ornek@gmail.com',
@@ -99,6 +168,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(height: 8),
               TextfieldViews(
+                controller: _passwordController,
                 obscureText: true,
                 enabled: true,
                 hintText: 'Şifrenizi girin',
@@ -147,11 +217,9 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(height: 20),
               ButtonView(
-                text: AppStrings.loginTitle,
+                text: _isLoading ? 'Giriş Yapılıyor...' : AppStrings.loginTitle,
                 backgroundColor: Color(0xff2096f3),
-                onPressed: () {
-                  // Giriş yapma işlemi
-                },
+                onPressed: _isLoading ? null : _handleLogin,
               ),
               SizedBox(height: 20),
               RichText(
