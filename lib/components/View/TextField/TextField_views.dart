@@ -1,11 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, file_names
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class TextfieldViews extends StatelessWidget {
   final String? labelText;
   final String? hintText;
   final TextEditingController? controller;
   final bool obscureText;
+  final List<TextInputFormatter>? inputFormatters;
   final TextInputType? keyboardType;
   final int? maxLines;
   final int? maxLength;
@@ -21,6 +23,7 @@ class TextfieldViews extends StatelessWidget {
     this.hintText,
     this.controller,
     required this.obscureText,
+    this.inputFormatters,
     this.keyboardType,
     this.maxLines,
     this.maxLength,
@@ -37,6 +40,7 @@ class TextfieldViews extends StatelessWidget {
       height: 50,
       width: MediaQuery.of(context).size.width * 0.9,
       child: TextField(
+        inputFormatters: inputFormatters,
         cursorColor: Colors.black,
         cursorErrorColor: Colors.red,
         cursorWidth: 2,

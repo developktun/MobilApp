@@ -3,6 +3,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:otobix/Constants/AppString_constants.dart';
 import 'package:otobix/components/View/Button/Button_view.dart';
 import 'package:otobix/components/View/TextField/TextField_views.dart';
@@ -16,6 +17,11 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   bool isRememberMe = false; // Checkbox için state değişkeni
+
+  final maskFormatter = MaskTextInputFormatter(
+    mask: '+90 (###) ### ####',
+    filter: {'#': RegExp(r'[0-9]')},
+  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,6 +121,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               SizedBox(height: 8),
               TextfieldViews(
+                inputFormatters: [maskFormatter],
                 obscureText: false,
                 enabled: true,
                 hintText: '+90 (555) 123 45 67',

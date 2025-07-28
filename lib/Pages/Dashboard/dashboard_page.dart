@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:otobix/services/auth_service.dart';
 import 'package:otobix/Homepage.dart';
 
@@ -77,6 +76,7 @@ class _DashboardPageState extends State<DashboardPage> {
           icon: Icon(Icons.logout, color: Colors.grey[600]),
           onPressed: () async {
             await AuthService.logout();
+            // ignore: use_build_context_synchronously
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => Homepage()),
               (route) => false,
@@ -114,11 +114,7 @@ class _DashboardPageState extends State<DashboardPage> {
               CircleAvatar(
                 radius: 25,
                 backgroundColor: Colors.white.withOpacity(0.2),
-                child: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                  size: 30,
-                ),
+                child: Icon(Icons.person, color: Colors.white, size: 30),
               ),
               SizedBox(width: 15),
               Expanded(
@@ -211,11 +207,29 @@ class _DashboardPageState extends State<DashboardPage> {
         SizedBox(height: 16),
         Row(
           children: [
-            Expanded(child: _buildActionCard('Yıkama\nRezervasyonu', Icons.calendar_today, Colors.blue)),
+            Expanded(
+              child: _buildActionCard(
+                'Yıkama\nRezervasyonu',
+                Icons.calendar_today,
+                Colors.blue,
+              ),
+            ),
             SizedBox(width: 12),
-            Expanded(child: _buildActionCard('Araç\nTakibi', Icons.directions_car, Colors.green)),
+            Expanded(
+              child: _buildActionCard(
+                'Araç\nTakibi',
+                Icons.directions_car,
+                Colors.green,
+              ),
+            ),
             SizedBox(width: 12),
-            Expanded(child: _buildActionCard('Fiyat\nHesapla', Icons.calculate, Colors.orange)),
+            Expanded(
+              child: _buildActionCard(
+                'Fiyat\nHesapla',
+                Icons.calculate,
+                Colors.orange,
+              ),
+            ),
           ],
         ),
       ],
@@ -279,16 +293,40 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
         ),
         SizedBox(height: 16),
-        _buildServiceCard('Dış Yıkama', '₺50', '30 dk', Icons.car_repair, Colors.blue),
+        _buildServiceCard(
+          'Dış Yıkama',
+          '₺50',
+          '30 dk',
+          Icons.car_repair,
+          Colors.blue,
+        ),
         SizedBox(height: 12),
-        _buildServiceCard('İç Dış Yıkama', '₺80', '45 dk', Icons.cleaning_services, Colors.green),
+        _buildServiceCard(
+          'İç Dış Yıkama',
+          '₺80',
+          '45 dk',
+          Icons.cleaning_services,
+          Colors.green,
+        ),
         SizedBox(height: 12),
-        _buildServiceCard('Detaylı Temizlik', '₺150', '2 saat', Icons.auto_fix_high, Colors.purple),
+        _buildServiceCard(
+          'Detaylı Temizlik',
+          '₺150',
+          '2 saat',
+          Icons.auto_fix_high,
+          Colors.purple,
+        ),
       ],
     );
   }
 
-  Widget _buildServiceCard(String title, String price, String duration, IconData icon, Color color) {
+  Widget _buildServiceCard(
+    String title,
+    String price,
+    String duration,
+    IconData icon,
+    Color color,
+  ) {
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -376,11 +414,26 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
           child: Column(
             children: [
-              _buildActivityItem('Dış Yıkama Tamamlandı', 'Bugün, 14:30', Icons.check_circle, Colors.green),
+              _buildActivityItem(
+                'Dış Yıkama Tamamlandı',
+                'Bugün, 14:30',
+                Icons.check_circle,
+                Colors.green,
+              ),
               Divider(height: 20),
-              _buildActivityItem('Rezervasyon Yapıldı', 'Dün, 16:45', Icons.calendar_today, Colors.blue),
+              _buildActivityItem(
+                'Rezervasyon Yapıldı',
+                'Dün, 16:45',
+                Icons.calendar_today,
+                Colors.blue,
+              ),
               Divider(height: 20),
-              _buildActivityItem('İç Dış Yıkama Tamamlandı', '2 gün önce', Icons.check_circle, Colors.green),
+              _buildActivityItem(
+                'İç Dış Yıkama Tamamlandı',
+                '2 gün önce',
+                Icons.check_circle,
+                Colors.green,
+              ),
             ],
           ),
         ),
@@ -388,7 +441,12 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget _buildActivityItem(String title, String time, IconData icon, Color color) {
+  Widget _buildActivityItem(
+    String title,
+    String time,
+    IconData icon,
+    Color color,
+  ) {
     return Row(
       children: [
         Icon(icon, color: color, size: 20),
@@ -418,4 +476,4 @@ class _DashboardPageState extends State<DashboardPage> {
       ],
     );
   }
-} 
+}
